@@ -41,14 +41,14 @@
 //                 secondZero = '';
 //             };
 //             timeDisplay.textContent = `${minutes}:${seconds}${secondZero}`;
-                // resetTimer(song);
+//                 resetTimer(song);
 //         });
 //     });
 
-    // const resetTimer = (song) => {
-    //     song.currentTime = 0;
-    //     checkPlaying(song);
-    // };
+//     const resetTimer = (song) => {
+//         song.currentTime = 0;
+//         checkPlaying(song);
+//     };
 
 //     //Stop and Play sounds function;
 //     function checkPlaying(song) {
@@ -113,6 +113,24 @@ const app = () => {
         checkPlaying(song);
     });
 
+    sounds.forEach(option => {
+        option.addEventListener('click', function() {
+            song.src = this.getAttribute('data-sound');
+            video.src = this.getAttribute('data-video');
+            checkPlaying(song);
+        });
+    });
+
+    timeSelect.forEach(option => {
+        option.addEventListener('click', function() {
+            fakeDuration = this.getAttribute('data-time');
+            minutes = Math.floor(fakeDuration / 60);
+            seconds = Math.floor(fakeDuration % 60);
+            timeDisplay.textContent = `${minutes}:${seconds}`;
+            checkPlaying(song);
+        });
+    });
+    
     const checkPlaying = (song) => {
         if (song.paused) {
             song.play();
@@ -125,11 +143,28 @@ const app = () => {
         };
     };
 
-    play
+    //Animate circle
+    song.ontimeupdate = () => {
+        let currentTime = song.currentTime;
+        let elapsed =  fakeDuration - currentTime;
+        let minutes = Math.floor(elapsed / 60);
+        let seconds = Math.floor(elapsed % 60);
 
+        //Animate circle
+        let progress = outlineLength - (currentTime / fakeDuration) * outlineLength;
+        outline.style.strokeDashoffset = progress;
 
+        //Animate text
+        timeDisplay.textContent = `${minutes}:${seconds}`;
 
-
+       // Stop animation
+        if (currentTime >= fakeDuration) {
+            song.pause();
+            video.pause();
+            song.currentTime = 0;
+            play.src = './svg/play.svg';
+        };
+    };
 }
 
 app();
