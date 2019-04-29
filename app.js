@@ -157,7 +157,7 @@ const app = () => {
         //Animate text
         timeDisplay.textContent = `${minutes}:${seconds}`;
 
-       // Stop animation
+       // Stop animation/
         if (currentTime >= fakeDuration) {
             song.pause();
             video.pause();
